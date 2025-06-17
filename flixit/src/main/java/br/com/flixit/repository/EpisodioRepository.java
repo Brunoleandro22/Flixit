@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface EpisodioRepository extends JpaRepository<Episodio, Integer> {
     List<Episodio> findBySerie(Serie serieEncontrada);
+    List<Episodio> findTop5BySerieOrderByAvaliacaoDesc(Serie serie);
+
 }
 

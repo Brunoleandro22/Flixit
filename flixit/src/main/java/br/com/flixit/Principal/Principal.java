@@ -5,6 +5,8 @@ import br.com.flixit.repository.EpisodioRepository;
 import br.com.flixit.repository.SerieRepository;
 import br.com.flixit.service.ConsumoApi;
 import br.com.flixit.service.ConverteDados;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,6 +21,8 @@ public class Principal {
     private SerieRepository repositorio;
     private EpisodioRepository episodioRepository;
     private List<Serie> series = new ArrayList<>();
+
+    private Optional<Serie> serieBusca;
 
     public Principal(SerieRepository repositorio, EpisodioRepository episodioRepository) {
         this.repositorio = repositorio;
@@ -38,6 +42,7 @@ public class Principal {
                     7 - Buscar por gênero
                     8 - Filtrar Séries
                     9 - Buscar episódio por trecho
+                    10 - Buscar melhores episódios
                     0 - Sair
                     """;
 
@@ -55,6 +60,7 @@ public class Principal {
                 case 7 -> buscarSeriesPorCategoria();
                 case 8 -> filtrarSeriesPorTemporadaEAvaliacao();
                 case 9 -> buscarEpisodioPorTrecho();
+                case 10 -> topEpisodiosPorSerie();
                 case 0 -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida");
             }
@@ -137,10 +143,10 @@ public class Principal {
     private void buscarSeriePorTitulo() {
         System.out.println("Escolha uma série pelo nome:");
         var nomeSerie = leitura.nextLine();
-        Optional<Serie> serieBuscada = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
+        serieBusca = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
 
-        if (serieBuscada.isPresent()) {
-            System.out.println("Dados da série: " + serieBuscada.get());
+        if (serieBusca.isPresent()) {
+            System.out.println("Dados da série: " + serieBusca.get());
         } else {
             System.out.println("Série não encontrada!");
         }
@@ -190,6 +196,24 @@ public class Principal {
         episodiosEncontrados.forEach(e -> System.out.printf("Serie: %s\nTemporada: %s\nEpisodio %s - %s\n",
                 e.getSerie().getTitulo(), e.getTemporada(),
                 e.getNumeroEpisodio(), e.getTitulo()));
+    }
+
+    private void topEpisodiosPorSerie() {
+        buscarSeriePorTitulo();
+        if (serieBusca.isPresent()) {
+            Serie serie = serieBusca.get();
+            List<Episodio> topEpisodios = episodioRepository.findTop5BySerieOrderByAvaliacaoDesc(serie);
+
+            if (topEpisodios.isEmpty()) {
+                System.out.println("Essa série ainda não tem episódios cadastrados.");
+            } else {
+                topEpisodios.forEach(e -> System.out.printf("Série: %s\nTemporada: %s\nEpisódio %s - %s\n\n",
+                        e.getSerie().getTitulo(), e.getTemporada(),
+                        e.getNumeroEpisodio(), e.getTitulo()));
+            }
+        } else {
+            System.out.println("Série não encontrada.");
+        }
     }
 }
 
