@@ -18,7 +18,7 @@ public class Episodio {
     private String titulo;
     private Integer numeroEpisodio;
     private Double avaliacao;
-    private LocalDate dalaLancamento;
+    private LocalDate dataLancamento;
 
     @ManyToOne
     private Serie serie;
@@ -36,14 +36,12 @@ public class Episodio {
             this.avaliacao = 0.0;
         }
         try {
-            this.dalaLancamento = LocalDate.parse(dadosEpisodio.dalaLancamento());
+            this.dataLancamento = LocalDate.parse(dadosEpisodio.dataLancamento());
         }catch (DateTimeException ex){
-            dalaLancamento = dalaLancamento;
+            dataLancamento = dataLancamento;
         }
 
     }
-
-
 
     public long getId() {
         return id;
@@ -51,22 +49,6 @@ public class Episodio {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Integer getNumeroEpisodio() {
-        return numeroEpisodio;
-    }
-
-    public void setNumeroEpisodio(Integer numeroEpisodio) {
-        this.numeroEpisodio = numeroEpisodio;
-    }
-
-    public Serie getSerie() {
-        return serie;
-    }
-
-    public void setSerie(Serie serie) {
-        this.serie = serie;
     }
 
     public Integer getTemporada() {
@@ -77,14 +59,6 @@ public class Episodio {
         this.temporada = temporada;
     }
 
-    public LocalDate getDalaLancamento() {
-        return dalaLancamento;
-    }
-
-    public void setDalaLancamento(LocalDate dalaLancamento) {
-        this.dalaLancamento = dalaLancamento;
-    }
-
     public String getTitulo() {
         return titulo;
     }
@@ -93,12 +67,12 @@ public class Episodio {
         this.titulo = titulo;
     }
 
-    public Integer getNumero() {
+    public Integer getNumeroEpisodio() {
         return numeroEpisodio;
     }
 
-    public void setNumero(Integer numero) {
-        this.numeroEpisodio = numero;
+    public void setNumeroEpisodio(Integer numeroEpisodio) {
+        this.numeroEpisodio = numeroEpisodio;
     }
 
     public Double getAvaliacao() {
@@ -109,6 +83,22 @@ public class Episodio {
         this.avaliacao = avaliacao;
     }
 
+    public LocalDate getDataLancamento() {
+        return dataLancamento;
+    }
+
+    public void setDataLancamento(LocalDate dataLancamento) {
+        this.dataLancamento = dataLancamento;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
+    }
+
     @Override
     public String toString() {
         return "Episodio{" +
@@ -116,7 +106,7 @@ public class Episodio {
                 ", titulo='" + titulo + '\'' +
                 ", numeroEpisodio=" + numeroEpisodio +
                 ", avaliacao=" + avaliacao +
-                ", dalaLancamento=" + dalaLancamento +
+                ", dalaLancamento=" + dataLancamento +
                 '}';
     }
 }

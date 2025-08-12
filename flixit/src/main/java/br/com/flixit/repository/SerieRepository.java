@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,4 +37,8 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
 
     @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.avaliacao DESC")
     List<Episodio> buscarTopEpisodiosPorSerie(@Param("serie") Serie serie, Pageable pageable);
+
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie AND e.dataLancamento >= :dataInicio")
+    List<Episodio> epidodiosPorSerieEAno(@Param("serie") Serie serie, @Param("dataInicio") LocalDate dataInicio);
+
 }

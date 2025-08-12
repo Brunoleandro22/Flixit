@@ -8,6 +8,7 @@ import br.com.flixit.service.ConverteDados;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,7 @@ public class Principal {
                     8 - Filtrar Séries
                     9 - Buscar episódio por trecho
                     10 - Buscar melhores episódios
+                    11- BUscar episódios a partir de uma data
                     0 - Sair
                     """;
 
@@ -61,12 +63,12 @@ public class Principal {
                 case 8 -> filtrarSeriesPorTemporadaEAvaliacao();
                 case 9 -> buscarEpisodioPorTrecho();
                 case 10 -> topEpisodiosPorSerie();
+                case 11 -> buscarEpisodiosDepoisDeUmaData();
                 case 0 -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida");
             }
         }
     }
-
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
@@ -213,6 +215,20 @@ public class Principal {
             }
         } else {
             System.out.println("Série não encontrada.");
+        }
+    }
+    private void buscarEpisodiosDepoisDeUmaData() {
+        buscarSeriePorTitulo();
+        if(serieBusca.isPresent()){
+            Serie serie = serieBusca.get();
+            System.out.println("DIgite a ano limiete de lançamento");
+            var anoLancamento = leitura.nextInt();
+            leitura.nextLine();
+
+            LocalDate dataInicio = LocalDate.of(anoLancamento, 1, 1);
+
+            List<Episodio>episodiosAno = repositorio.epidodiosPorSerieEAno(serie, dataInicio);
+            episodiosAno.forEach(System.out::println);
         }
     }
 }
